@@ -8,12 +8,9 @@ lock = threading.Lock()  # Use threading.Lock for thread safety
 usernames = []  # Define usernames at the module level
 
 def generate_username():
-    length = random.randint(2, 16)
+    length = random.randint(5, 16)
     username = ''.join(random.choices(string.ascii_letters + string.digits + '_', k=length))
     
-    # Ensure the username doesn't start or end with an underscore
-    if username[0] == '_' or username[-1] == '_':
-        return generate_username()
     
     return username
 
@@ -60,12 +57,11 @@ def process_username():
         
 
 def main():
-    num_threads = 5  # Number of threads to run concurrently
+    num_threads = 25  # Number of threads to run concurrently
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = [executor.submit(process_username) for _ in range(num_threads)]
         concurrent.futures.wait(futures)
-    
-    # Print valid usernames to console
+
     print("\nValid Usernames:")
     for username, uuid in usernames:
         print(f"Username: {username}, UUID: {uuid}")
